@@ -123,24 +123,23 @@ nav ul li a {
 .product-card button {
   width: 50%;
   place-self: center;
+  margin-bottom: 3rem;
 }
 .product-card p {
   place-self: center;
   padding-top: .5rem;
+  margin-bottom: 1rem;
 }
 .product-card h1 {
   font-size: 1.5rem;
   place-self: center;
-  padding-top: 1rem;
+  margin-top: 1rem;
 }
 .product-card h3 {
   font-size: 1rem;
   place-self: center;
 }
-.product-card h3 p{
-  font-size: .8rem;
-  place-self: center;
-}
+
 footer{
   margin-top:5rem;
   display: flex;
