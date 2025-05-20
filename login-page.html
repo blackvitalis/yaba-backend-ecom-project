@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Signup Page with Austin Griffin Background</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url('asset/wolves-and-northern-lights.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(107, 72, 255, 0.5), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.1); }
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            min-height: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            z-index: 1;
+        }
+
+        .form-box {
+            width: 50%;
+            padding: 40px;
+            transition: all 0.5s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .login-box {
+            transform: translateX(0);
+            z-index: 2;
+        }
+
+        .signup-box {
+            transform: translateX(100%);
+            visibility: hidden;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.active .login-box {
+            transform: translateX(-100%);
+            visibility: hidden;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.active .signup-box {
+            transform: translateX(0);
+            visibility: visible;
+            opacity: 1;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px 40px 10px 10px;
+            font-size: 1em;
+            color: #333;
+            border: none;
+            border-bottom: 2px solid #333;
+            outline: none;
+            background: transparent;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-box input::placeholder {
+            color: #999;
+        }
+
+        .input-box i {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .input-box input:focus {
+            border-color: #6b48ff;
+            box-shadow: 0 2px 5px rgba(107, 72, 255, 0.3);
+        }
+
+        .input-box .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #333;
+            user-select: none;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8em;
+            margin-top: 5px;
+            min-height: 20px;
+            display: none;
+        }
+
+        button.btn {
+            width: 100%;
+            padding: 12px;
+            background: #6b48ff;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        button.btn:hover:not(:disabled) {
+            background: #5438cc;
+            transform: scale(1.05);
+        }
+
+        button.btn:disabled {
+            background: #a29bfe;
+            cursor: not-allowed;
+        }
+
+        button.btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #fff;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #333;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .social-icons a:hover {
+            background: #f5f5f5;
+            transform: scale(1.1);
+        }
+
+        .social-icons a i {
+            font-size: 1.5em;
+        }
+
+        .social-icons a.google { border-color: #db4437; color: #db4437; }
+        .social-icons a.facebook { border-color: #4267b2; color: #4267b2; }
+        .social-icons a.github { border-color: #333; color: #333; }
+        .social-icons a.linkedin { border-color: #0077b5; color: #0077b5; }
+
+        .form-box p {
+            text-align: center;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .toggle-link a {
+            color: #6b48ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .panel {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 40px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .panel.left {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .panel.right {
+            right: 0;
+            transform: translateX(100%);
+        }
+
+        .container.active .panel.left {
+            transform: translateX(200%);
+        }
+
+        .container.active .panel.right {
+            transform: translateX(0);
+        }
+
+        .panel h2 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .panel p {
+            font-size: 1em;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                min-height: 400px;
+                flex-direction: column;
+            }
+
+            .form-box {
+                width: 100%;
+                position: static;
+                visibility: visible !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .login-box {
+                display: block;
+            }
+
+            .signup-box {
+                display: none;
+            }
+
+            .container.active .login-box {
+                display: none;
+            }
+
+            .container.active .signup-box {
+                display: block;
+            }
+
+            .panel {
+                display: none;
+            }
+
+            body::before {
+                background: radial-gradient(circle at 50% 50%, rgba(107, 72, 255, 0.4), transparent 80%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container" role="main">
+        <div class="form-box login-box" role="region" aria-label="Login Form">
+            <form id="loginForm">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input type="email" id="loginEmail" placeholder="Email" required aria-describedby="loginEmailError">
+                    <i class="bx bxs-envelope"></i>
+                    <div class="error-message" id="loginEmailError" role="alert"></div>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="loginPassword" placeholder="Password" required aria-describedby="loginPasswordError">
+                    <span class="toggle-password" data-target="loginPassword" role="button" tabindex="0">Show</span>
+                    <div class="error-message" id="loginPasswordError" role="alert"></div>
+                </div>
+                <button type="submit" class="btn" id="loginButton">Login</button>
+                <p>or login with social platform</p>
+                <div class="social-icons">
+                    <a href="#" class="google" id="googleLogin" aria-label="Sign in with Google"><i class="bx bxl-google"></i></a>
+                    <a href="#" class="facebook" id="facebookLogin" aria-label="Sign in with Facebook"><i class="bx bxl-facebook"></i></a>
+                    <a href="#" class="github" id="githubLogin" aria-label="Sign in with GitHub"><i class="bx bxl-github"></i></a>
+                    <a href="#" class="linkedin" id="linkedinLogin" aria-label="Sign in with LinkedIn"><i class="bx bxl-linkedin"></i></a>
+                </div>
+                <div class="toggle-link">
+                    <p>Don't have an account? <a href="#" id="signupLink" aria-label="Switch to Sign Up">Sign Up</a></p>
+                </div>
+            </form>
+        </div>
+        <div class="form-box signup-box" role="region" aria-label="Sign Up Form">
+            <form id="signupForm">
+                <h1>Registration</h1>
+                <div class="input-box">
+                    <input type="text" id="signupUsername" placeholder="Username" required aria-describedby="signupUsernameError">
+                    <i class="bx bxs-user"></i>
+                    <div class="error-message" id="signupUsernameError" role="alert"></div>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="signupEmail" placeholder="Email" required aria-describedby="signupEmailError">
+                    <i class="bx bxs-envelope"></i>
+                    <div class="error-message" id="signupEmailError" role="alert"></div>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="signupPassword" placeholder="Password" required aria-describedby="signupPasswordError">
+                    <span class="toggle-password" data-target="signupPassword" role="button" tabindex="0">Show</span>
+                    <div class="error-message" id="signupPasswordError" role="alert"></div>
+                </div>
+                <button type="submit" class="btn" id="signupButton">Register</button>
+                <p>or register with social platform</p>
+                <div class="social-icons">
+                    <a href="#" class="google" id="googleSignup" aria-label="Sign up with Google"><i class="bx bxl-google"></i></a>
+                    <a href="#" class="facebook" id="facebookSignup" aria-label="Sign up with Facebook"><i class="bx bxl-facebook"></i></a>
+                    <a href="#" class="github" id="githubSignup" aria-label="Sign up with GitHub"><i class="bx bxl-github"></i></a>
+                    <a href="#" class="linkedin" id="linkedinSignup" aria-label="Sign up with LinkedIn"><i class="bx bxl-linkedin"></i></a>
+                </div>
+                <div class="toggle-link">
+                    <p>Already have an account? <a href="#" id="loginLink" aria-label="Switch to Login">Login</a></p>
+                </div>
+            </form>
+        </div>
+        <div class="panel left" role="complementary" aria-label="Welcome Back Panel">
+            <h2>Welcome Back!</h2>
+            <p>Enter your details or use a social account to login and continue your journey with us.</p>
+        </div>
+        <div class="panel right" role="complementary" aria-label="Sign Up Invitation Panel">
+            <h2>Hello, Friend!</h2>
+            <p>Register with your details or a social account to start exploring our platform.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.auth0.com/js/auth0/9.26.0/auth0.min.js"></script>
+    <script>
+        // Initialize Auth0 client
+        const webAuth = new auth0.WebAuth({
+            domain: 'YOUR_AUTH0_DOMAIN', // e.g., 'your-app.auth0.com'
+            clientID: 'YOUR_CLIENT_ID',
+            redirectUri: window.location.href,
+            responseType: 'token id_token',
+            scope: 'openid profile email'
+        });
+
+        const container = document.getElementById('container');
+        const signupLink = document.getElementById('signupLink');
+        const loginLink = document.getElementById('loginLink');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const loginButton = document.getElementById('loginButton');
+        const signupButton = document.getElementById('signupButton');
+        const googleLogin = document.getElementById('googleLogin');
+        const facebookLogin = document.getElementById('facebookLogin');
+        const githubLogin = document.getElementById('githubLogin');
+        const linkedinLogin = document.getElementById('linkedinLogin');
+        const googleSignup = document.getElementById('googleSignup');
+        const facebookSignup = document.getElementById('facebookSignup');
+        const githubSignup = document.getElementById('githubSignup');
+        const linkedinSignup = document.getElementById('linkedinSignup');
+        const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+
+        // Validation functions
+        const validateEmail = (email) => {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        };
+
+        const validatePassword = (password) => {
+            return password.length >= 8 && /[A-Z]/.test(password) && /[0-9]/.test(password);
+        };
+
+        const validateUsername = (username) => {
+            return username.length >= 3 && /^[a-zA-Z0-9_]+$/.test(username);
+        };
+
+        const showError = (elementId, message) => {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            errorElement.focus();
+        };
+
+        const clearErrors = (formId) => {
+            const form = document.getElementById(formId);
+            form.querySelectorAll('.error-message').forEach(error => {
+                error.textContent = '';
+                error.style.display = 'none';
+            });
+        };
+
+        const setButtonLoading = (button, isLoading) => {
+            button.disabled = isLoading;
+            button.classList.toggle('loading', isLoading);
+            button.textContent = isLoading ? '' : button.id === 'loginButton' ? 'Login' : 'Register';
+        };
+
+        // Toggle password visibility
+        togglePasswordButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetInput = document.getElementById(button.dataset.target);
+                const isPassword = targetInput.type === 'password';
+                targetInput.type = isPassword ? 'text' : 'password';
+                button.textContent = isPassword ? 'Hide' : 'Show';
+            });
+            button.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    button.click();
+                }
+            });
+        });
+
+        // Toggle between forms
+        signupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.classList.add('active');
+            clearErrors('loginForm');
+            clearErrors('signupForm');
+            loginForm.reset();
+            signupForm.reset();
+            document.getElementById('signupUsername').focus();
+        });
+
+        loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            container.classList.remove('active');
+            clearErrors('loginForm');
+            clearErrors('signupForm');
+            loginForm.reset();
+            signupForm.reset();
+            document.getElementById('loginEmail').focus();
+        });
+
+        // Social login handlers
+        const handleSocialAuth = (provider, button) => {
+            setButtonLoading(button, true);
+            webAuth.authorize({
+                connection: provider // 'google-oauth2', 'facebook', 'github', 'linkedin'
+            });
+        };
+
+        googleLogin.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('google-oauth2', googleLogin); });
+        facebookLogin.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('facebook', facebookLogin); });
+        githubLogin.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('github', githubLogin); });
+        linkedinLogin.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('linkedin', linkedinLogin); });
+        googleSignup.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('google-oauth2', googleSignup); });
+        facebookSignup.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('facebook', facebookSignup); });
+        githubSignup.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('github', githubSignup); });
+        linkedinSignup.addEventListener('click', (e) => { e.preventDefault(); handleSocialAuth('linkedin', linkedinSignup); });
+
+        // Handle Auth0 callback
+        webAuth.parseHash({ hash: window.location.hash }, (err, authResult) => {
+            if (err) {
+                showError('loginEmailError', 'Social login failed. Please try again.');
+                setButtonLoading(googleLogin, false);
+                setButtonLoading(facebookLogin, false);
+                setButtonLoading(githubLogin, false);
+                setButtonLoading(linkedinLogin, false);
+                setButtonLoading(googleSignup, false);
+                setButtonLoading(facebookSignup, false);
+                setButtonLoading(githubSignup, false);
+                setButtonLoading(linkedinSignup, false);
+                return;
+            }
+            if (authResult && authResult.idToken) {
+                const { name, email } = authResult.idTokenPayload;
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (!users.some(u => u.email === email)) {
+                    users.push({ username: name || email.split('@')[0], email, password: '' });
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+                alert(`Welcome, ${name || email}!`);
+                window.location.hash = '';
+                loginForm.reset();
+                signupForm.reset();
+                clearErrors('loginForm');
+                clearErrors('signupForm');
+                setButtonLoading(googleLogin, false);
+                setButtonLoading(facebookLogin, false);
+                setButtonLoading(githubLogin, false);
+                setButtonLoading(linkedinLogin, false);
+                setButtonLoading(googleSignup, false);
+                setButtonLoading(facebookSignup, false);
+                setButtonLoading(githubSignup, false);
+                setButtonLoading(linkedinSignup, false);
+            }
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors('loginForm');
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            let hasError = false;
+            if (!email) {
+                showError('loginEmailError', 'Email is required');
+                hasError = true;
+            } else if (!validateEmail(email)) {
+                showError('loginEmailError', 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            if (!password) {
+                showError('loginPasswordError', 'Password is required');
+                hasError = true;
+            } else if (!validatePassword(password)) {
+                showError('loginPasswordError', 'Password must be at least 8 characters with an uppercase letter and a number');
+                hasError = true;
+            }
+
+            if (!hasError) {
+                setButtonLoading(loginButton, true);
+                try {
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const user = users.find(u => u.email === email && (u.password === password || u.password === ''));
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    if (user) {
+                        alert(`Welcome back, ${user.username}!`);
+                        loginForm.reset();
+                        clearErrors('loginForm');
+                    } else {
+                        showError('loginEmailError', 'Invalid email or password');
+                    }
+                } catch (error) {
+                    showError('loginEmailError', 'An error occurred. Please try again.');
+                } finally {
+                    setButtonLoading(loginButton, false);
+                }
+            }
+        });
+
+        // Signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors('signupForm');
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+
+            let hasError = false;
+            if (!username) {
+                showError('signupUsernameError', 'Username is required');
+                hasError = true;
+            } else if (!validateUsername(username)) {
+                showError('signupUsernameError', 'Username must be at least 3 characters and contain only letters, numbers, or underscores');
+                hasError = true;
+            }
+
+            if (!email) {
+                showError('signupEmailError', 'Email is required');
+                hasError = true;
+            } else if (!validateEmail(email)) {
+                showError('signupEmailError', 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            if (!password) {
+                showError('signupPasswordError', 'Password is required');
+                hasError = true;
+            } else if (!validatePassword(password)) {
+                showError('signupPasswordError', 'Password must be at least 8 characters with an uppercase letter and a number');
+                hasError = true;
+            }
+
+            if (!hasError) {
+                setButtonLoading(signupButton, true);
+                try {
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    if (users.some(u => u.email === email)) {
+                        showError('signupEmailError', 'Email already registered');
+                    } else {
+                        users.push({ username, email, password });
+                        localStorage.setItem('users', JSON.stringify(users));
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        alert('Registration successful! You can now login.');
+                        container.classList.remove('active');
+                        signupForm.reset();
+                        clearErrors('signupForm');
+                        document.getElementById('loginEmail').focus();
+                    }
+                } catch (error) {
+                    showError('signupEmailError', 'An error occurred. Please try again.');
+                } finally {
+                    setButtonLoading(signupButton, false);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
